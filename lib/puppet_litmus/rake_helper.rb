@@ -375,8 +375,8 @@ module PuppetLitmus::RakeHelper
 
   class LitmusTimeoutError < StandardError; end
 
-  def with_retries(options: { tries: Float::INFINITY }, max_wait_minutes: 15)
-    stop = Time.now + (max_wait_minutes * 60)
+  def with_retries(options: { tries: Float::INFINITY }, max_wait_minutes: 1)
+    stop = Time.now + (max_wait_minutes * 30)
     Retryable.retryable(options.merge(not: [LitmusTimeoutError])) do
       raise LitmusTimeoutError if Time.now > stop
 
