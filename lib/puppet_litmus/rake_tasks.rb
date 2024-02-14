@@ -58,6 +58,7 @@ namespace :litmus do
 
         if result.first['status'] == 'success'
           $stdout.puts "#{result.first['value']['node_name']}, #{image}"
+          $stdout.flush
         else
           failed_image_message += "=====\n#{result.first['target']}\n#{result.first['value']['_output']}\n#{result.inspect}"
         end
@@ -85,6 +86,7 @@ namespace :litmus do
       raise "Failed provisioning #{args[:platform]} using #{args[:provisioner]}\n#{results.first}" unless results.first['status'] == 'success'
 
       puts "Successfully provisioned #{args[:platform]} using #{args[:provisioner]}\n"
+      $stdout.flush
 
       target_names = if results.first['value']['node']
                        [results.first['value']['node']['uri']]
@@ -102,6 +104,7 @@ namespace :litmus do
       raise if current_retry_count > retry_count
 
       puts "Provision of node #{target_names.first} failed, Retrying #{current_retry_count} of #{retry_count}"
+      $stdout.flush
       retry
     ensure
       stop_spinner(spinner)

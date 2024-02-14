@@ -282,16 +282,18 @@ module PuppetLitmus::RakeHelper
     include ::BoltSpec::Run
     target_nodes = find_targets(inventory_hash, target_node_name)
     puts "Checking connectivity for #{target_nodes.inspect}"
+    $stdout.flush
 
     results = run_command('cd .', target_nodes, config: nil, inventory: inventory_hash)
     failed = []
     results.reject { |r| r['status'] == 'success' }.each do |result|
-      puts "Failure connecting to #{result['target']}:\n#{result.inspect}"
+      $stderr.puts "Failure connecting to #{result['target']}:\n#{result.inspect}"
       failed.push(result['target'])
     end
     raise "Connectivity has failed on: #{failed}" unless failed.empty?
 
     puts 'Connectivity check PASSED.'
+    $stdout.flush
     true
   end
 
